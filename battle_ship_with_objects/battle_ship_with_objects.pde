@@ -4,6 +4,8 @@
 // 2d array
 // extra for exp = objects : ) dont know how i lived without them.
 
+PImage win,lost;
+
 
 int[][] theBoard, theEnemyBoard, theFinalBoard, theFinalEnemyBoard;
 
@@ -35,6 +37,9 @@ void setup() {
   startBoardValues(); // these are setting up the board and values that go with it.
   
   assagineValues();
+  
+  win =loadImage("yodaer.jpg");
+  lost = loadImage("lostYoda.jpg");
   
 
   
@@ -304,6 +309,8 @@ void theAiHasWonIt() {
   textSize(32);
   text("the freedom alliance", 5, height/8);
   text("has failed, doomed we are", 5, height/5); 
+  
+  image(lost,width/2 + 50, height/4,250,250);
 
 }
     
@@ -314,6 +321,8 @@ void playerWonItScreen(){
   textSize(32);
   text("Windows lost the game", 5, height/2 + 50);
   text("saved the world you have humm", 5, height/2 + 100); 
+  
+  image(win,5,height/2+125, 250,250);
 
 
 }
