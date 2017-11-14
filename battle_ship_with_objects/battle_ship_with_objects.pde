@@ -20,7 +20,7 @@ EnemyShip e1, e2, e3;
 Button startButton, readyButton;
 
 void setup() {
-  size(600, 600);
+  size(800, 800);
   aiWin = true;
   playerWin = true;
   state = 0; // default being the start screen
