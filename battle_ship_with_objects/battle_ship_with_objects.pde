@@ -9,7 +9,7 @@ int[][] theBoard, theEnemyBoard, theFinalBoard;
 
 int rows, cols, state, lengthOfBoard, squareHeight, squareWidth, xChoice, yChoice, xAiChoice, yAiChoice;
 
-boolean letTheGameBegin, playerTurn;
+boolean letTheGameBegin, playerTurn, playerWin, aiWin;
 
 Ship ship1, ship2, ship3;
 
@@ -19,27 +19,27 @@ Button startButton, readyButton;
 
 void setup() {
   size(600, 600);
+  aiWin = true;
+  playerWin = true;
   state = 0; // default being the start screen
-  rows = lengthOfBoard;
-  cols = lengthOfBoard;
-
+  
   lengthOfBoard = 20;
-
-
-  startBoardValues(); // these are setting up the board and values that go with it.
-
-  playerTurn = true;
-
   
-   playerTurn = false;
- 
   rows = lengthOfBoard;
   cols = lengthOfBoard;
-  
+ 
+  playerTurn = true;
   
   newObjects();// starting all my objects
   
+  startBoardValues(); // these are setting up the board and values that go with it.
+  
   assagineValues();
+  
+  
+
+  
+  
 
 
   
@@ -65,11 +65,18 @@ void draw() {
   }
 
   if (state == 2) { // the main game code. including AI
-    
-
     drawChangingBoard();  
     displayEnemyBoard();
+    gameChecker();
   }
+  if(state == 3) {
+    println("the game has been won by the PC");
+  
+  }
+  if(state == 4) {
+    println("the game has been won by tge player");
+  }
+
 }
 
 
@@ -126,7 +133,7 @@ void shipHandler() {
 
 void startBoardValues() {
   theBoard = new int [cols*2][rows*2];
-  theEnemyBoard = new int [cols] [rows];
+  theEnemyBoard = new int [cols*2] [rows*2];
   theFinalBoard = new int [cols*2][rows*2];
   squareWidth = width/lengthOfBoard;
   squareHeight =height/lengthOfBoard;
@@ -138,7 +145,7 @@ void startBoardValues() {
 void displayBoard() {
   for (int x = 1; x < cols+1-10; x++) {
     for (int y = rows/2; y < rows; y++) {
-      //println(" the value Of x is: " + x +  " the Value of y is: " + y);
+      
       if (y == lengthOfBoard/2) {
         fill(0);
       } else {
@@ -165,7 +172,6 @@ void displayFinalShips() {
 void drawChangingBoard() {
   for (int x = 1; x < cols+1-10; x++) {
     for (int y = rows/2; y < rows; y++) {
-      //println(" the value Of x is: " + x +  " the Value of y is: " + y);
       if (y == lengthOfBoard/2) {
         fill(0);
       } else {
@@ -195,15 +201,15 @@ void playerShots() {
 
     if (xChoice < 11 && yChoice < rows/2) {
       if (theEnemyBoard[xChoice][yChoice] == 0) {
-        println("true");
         theEnemyBoard[xChoice][yChoice] = 2; // if you are hitting the enemy ship
-      } else if (theEnemyBoard[xChoice][yChoice] == 1) {
-        theEnemyBoard[xChoice][yChoice] = 2;
-      } else if (theEnemyBoard[xChoice-1][yChoice+1] == 2) {
+      
+    } else if (theEnemyBoard[xChoice][yChoice] == 1) {
+        theEnemyBoard[xChoice][yChoice] = 3;
+      
+    } else if (theEnemyBoard[xChoice-1][yChoice+1] == 2) {
         playerTurn = true;
       }
       playerTurn = false;
-      println("false");
     }
 
     xChoice = int(mouseX - squareHeight/2);
@@ -215,7 +221,6 @@ void playerShots() {
   if (xChoice < 11 && yChoice < rows/2) {
         for (int x = 1; x < cols+1-10; x++) {
           for (int y = rows/2; y < rows; y++) {
-            println(theEnemyBoard[x][y]);
             if(theEnemyBoard[xChoice][yChoice] == 0) {
               theEnemyBoard[xChoice][yChoice] = 2; // if you are hitting the enemy ship
             }
@@ -265,11 +270,15 @@ void displayEnemyBoard() {
         fill(255);  // this is the base color of blue for the enemy squares
       }
       if ( theEnemyBoard[x][y] == 1) {
-        fill(20,20,20);
+        fill(0);
       
       }
       if (theEnemyBoard[x][y] == 2) {
         fill(100, 100, 243);
+      }
+      if (theEnemyBoard[x][y] == 3) {
+        fill(102,200,89);  
+      
       }
       rect(x*squareWidth, y*squareHeight, squareWidth, squareHeight);
     }
@@ -277,12 +286,42 @@ void displayEnemyBoard() {
 }
 
 
-
-void keyPressed() {
-  if (key == 'g') {
-    playerTurn = false;
+void gameChecker() {
+  if (state == 2) {
+    for (int x = 1; x < cols+1-10; x++) {
+      for (int y = rows/2; y < rows; y++) {
+        if (theFinalBoard[x][y] == 1) {
+          playerWin = true;
+        }
+        else {
+          playerWin = false;
+        }
+        
+        if(theEnemyBoard[x][y] == 1) {
+          aiWin = true;
+        }
+        else {
+          println("true");
+          aiWin = false;
+        }
+  }
+    
   }
 }
+    if (aiWin && playerWin) {
+      state = 2;
+    }
+    if(aiWin && playerWin == false) {
+      state = 3;
+    
+    }
+    if(aiWin == false && playerWin) {
+      state = 4;
+    }
+}
+
+
+
 
 void mousePressed() {
   if (state == 2) {

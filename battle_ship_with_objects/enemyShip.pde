@@ -16,7 +16,7 @@ class EnemyShip {
   }
 
   void displayEnemyShip() {
-    theFinalBoard[xCord][yCord] = 1;
-    theFinalBoard[placeForSecondXcord][placeForSecondYcord] = 1;
+    theEnemyBoard[xCord][yCord] = 1;
+    theEnemyBoard[placeForSecondXcord][placeForSecondYcord] = 1;
   }
 }
