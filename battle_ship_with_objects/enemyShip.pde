@@ -19,4 +19,12 @@ class EnemyShip {
     theEnemyBoard[xCord][yCord] = 1;
     theEnemyBoard[placeForSecondXcord][placeForSecondYcord] = 1;
   }
+  boolean amIGone() {
+    if(theEnemyBoard[xCord][yCord] != 1 && theEnemyBoard[placeForSecondXcord][placeForSecondYcord] != 1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 }

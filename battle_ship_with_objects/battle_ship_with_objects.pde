@@ -5,7 +5,7 @@
 // extra for exp = objects : ) dont know how i lived without them.
 
 
-int[][] theBoard, theEnemyBoard, theFinalBoard;
+int[][] theBoard, theEnemyBoard, theFinalBoard, theFinalEnemyBoard;
 
 int rows, cols, state, lengthOfBoard, squareHeight, squareWidth, xChoice, yChoice, xAiChoice, yAiChoice;
 
@@ -13,7 +13,7 @@ boolean letTheGameBegin, playerTurn, playerWin, aiWin;
 
 Ship ship1, ship2, ship3;
 
-EnemyShip e1, e2;
+EnemyShip e1, e2, e3;
 
 Button startButton, readyButton;
 
@@ -35,7 +35,6 @@ void setup() {
   startBoardValues(); // these are setting up the board and values that go with it.
   
   assagineValues();
-  
   
 
   
@@ -67,14 +66,22 @@ void draw() {
   if (state == 2) { // the main game code. including AI
     drawChangingBoard();  
     displayEnemyBoard();
-    gameChecker();
+    
+    if(e1.amIGone() && e2.amIGone() && e3.amIGone()) {
+      state = 3;
+    }
+    if(ship1.isHopeLost() && ship2.isHopeLost() && ship3.isHopeLost()) {
+      state = 4;
+    }
   }
   if(state == 3) {
-    println("the game has been won by the PC");
+    displayEnemyBoard();
+    playerWonItScreen();
   
   }
   if(state == 4) {
-    println("the game has been won by tge player");
+    drawChangingBoard();
+    theAiHasWonIt();
   }
 
 }
@@ -87,9 +94,14 @@ void assagineValues() {
   ship2.assigneValues(width - width/4 + width/20, height/4);
   ship3.assigneValues(width - width/4 -  width/20, height /3);
 
-  e1.assigment(3,5);
+  e1.assigment(int(random(2,10)),int(random(2,7)));
   e1.displayEnemyShip();
-
+  
+  e2.assigment(int(random(2,10)),int(random(2,7)));
+  e2.displayEnemyShip();
+  
+  e3.assigment(int(random(2,10)),int(random(2,7)));
+  e3.displayEnemyShip();
 }
 
 
@@ -102,6 +114,8 @@ void newObjects() {
   readyButton = new Button();
   
   e1 =  new EnemyShip();
+  e2 =  new EnemyShip();
+  e3 =  new EnemyShip();
 }
 void readyButtonHandler() {
   readyButton.displayButton(0 + width/5, 0 + height/4, 200, 100);
@@ -206,7 +220,7 @@ void playerShots() {
     } else if (theEnemyBoard[xChoice][yChoice] == 1) {
         theEnemyBoard[xChoice][yChoice] = 3;
       
-    } else if (theEnemyBoard[xChoice-1][yChoice+1] == 2) {
+    } else if (theEnemyBoard[xChoice][yChoice] == 2) {
         playerTurn = true;
       }
       playerTurn = false;
@@ -270,7 +284,7 @@ void displayEnemyBoard() {
         fill(255);  // this is the base color of blue for the enemy squares
       }
       if ( theEnemyBoard[x][y] == 1) {
-        fill(0);
+        //fill(0);
       
       }
       if (theEnemyBoard[x][y] == 2) {
@@ -285,43 +299,24 @@ void displayEnemyBoard() {
   }
 }
 
+void theAiHasWonIt() {
+  fill(0);
+  textSize(32);
+  text("the freedom alliance", 5, height/8);
+  text("has failed, doomed we are", 5, height/5); 
 
-void gameChecker() {
-  if (state == 2) {
-    for (int x = 1; x < cols+1-10; x++) {
-      for (int y = rows/2; y < rows; y++) {
-        if (theFinalBoard[x][y] == 1) {
-          playerWin = true;
-        }
-        else {
-          playerWin = false;
-        }
-        
-        if(theEnemyBoard[x][y] == 1) {
-          aiWin = true;
-        }
-        else {
-          println("true");
-          aiWin = false;
-        }
-  }
-    
-  }
 }
-    if (aiWin && playerWin) {
-      state = 2;
-    }
-    if(aiWin && playerWin == false) {
-      state = 3;
     
-    }
-    if(aiWin == false && playerWin) {
-      state = 4;
-    }
+
+
+void playerWonItScreen(){
+  fill(0);
+  textSize(32);
+  text("Windows lost the game", 5, height/2 + 50);
+  text("saved the world you have humm", 5, height/2 + 100); 
+
+
 }
-
-
-
 
 void mousePressed() {
   if (state == 2) {
@@ -331,4 +326,12 @@ void mousePressed() {
       theAI();
     }
   }
+}
+
+
+void keyPressed() {
+  if (key == 'q') {
+    playerTurn = false;
+  }
+
 }

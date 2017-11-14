@@ -5,6 +5,7 @@ class Ship {
   float x, y, placeForOtherSqaureX, halfSize, placeForOtherSqaureY;
   float sizeOfSide, thevalueOfXDq, thevalueOfYSq;
   boolean shipMoving, isMovingAllowed; 
+  int shipXcord, shipYcord;
 
   Ship() {
     sizeOfSide = width/20;
@@ -52,7 +53,7 @@ class Ship {
   }
 
   void snap() {
-    int shipXcord, shipYcord;
+
     shipXcord = int(x - sizeOfSide/2);
     shipYcord = int(y - sizeOfSide/2);
     
@@ -82,4 +83,21 @@ class Ship {
       }
     }
   }
+  boolean isHopeLost() {
+    if (theFinalBoard[shipXcord-1][shipYcord+1] != 1 && theFinalBoard[shipXcord-1][shipYcord+2] != 1) {
+      return true;
+    
+    }
+    else {
+      return false;
+    
+    }
+  
+  }
+
+
+
+
+
+
 }
